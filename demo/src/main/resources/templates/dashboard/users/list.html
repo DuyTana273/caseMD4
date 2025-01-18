@@ -58,7 +58,7 @@
               <th>Hành động</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="user-list">
             <tr th:each="users, l : ${users}" id="user-row-${users.id}">
               <td th:text="${l.index + 1}"></td>
               <td th:text="${users.username}"></td>
@@ -77,9 +77,10 @@
                   <i class="fas fa-pen"></i> Sửa
                 </a>
 
-                <button type="button" class="btn btn-danger btn-sm me-1" onclick="deleteUser(${users.id})">
+                <a th:href="@{/dashboard/users/delete/{id}(id=${users.id})}" class="btn btn-danger btn-sm me-1" onclick="return confirm('Bạn có chắc chắn muốn xoá?');">
                   <i class="fas fa-trash-alt"></i> Xóa
-                </button>
+                </a>
+
               </td>
             </tr>
           </tbody>
@@ -93,30 +94,6 @@
   <a th:href="@{/(page=${users.number - 1})}" th:if="${users.hasPrevious()}">Trang Trước</a>
   <a th:text="${users.number + 1} + '/' + ${users.totalPages}"></a>
   <a th:href="@{/(page=${users.number + 1})}" th:if="${users.hasNext()}">Trang Sau</a>
-
-<script>
-  function deleteUser(userId) {
-    if (confirm("Bạn có chắc chắn muốn xóa người dùng này không?")) {
-      $.ajax({
-        url: '/dashboard/users/delete/' + userId,
-        type: 'GET',
-        dataType: 'json',
-        success: function(data) {
-          if (data.status === "success") {
-            alert(data.message);
-            // Xóa dòng người dùng khỏi bảng
-            $('#user-row-' + userId).remove();
-          } else {
-            alert(data.message);
-          }
-        },
-        error: function(xhr, status, error) {
-          alert("Có lỗi xảy ra khi xóa người dùng.");
-        }
-      });
-    }
-  }
-</script>
 
 <!-- FontAwesome for icons -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
