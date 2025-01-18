@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+</head>
+<body>
+<!-- Hiển thị thông báo -->
+<div th:replace="~{fragments/toast.html}"></div>
+
+<h1>Cập nhật người dùng <strong th:text="${user.fullName}"></strong></h1>
+<form th:action="@{/dashboard/users/update}" th:object="${user}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{password}"/>
+    <div class="mb-3">
+        <label for="username" class="form-label">Tên đăng nhập</label>
+        <input type="text" id="username" name="username" class="form-control" th:field="*{username}" th:readonly="${user.id != null}">
+        <div th:if="${#fields.hasErrors('username')}" class="error">
+            <span th:errors="*{username}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="text" id="email" name="email" class="form-control" th:field="*{email}">
+        <div th:if="${#fields.hasErrors('email')}" class="error">
+            <span th:errors="*{email}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="phone" class="form-label">Phone</label>
+        <input type="text" id="phone" name="phone" class="form-control" th:field="*{phone}">
+        <div th:if="${#fields.hasErrors('phone')}" class="error">
+            <span th:errors="*{phone}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="fullName" class="form-label">Tên</label>
+        <input type="text" id="fullName" name="fullName" class="form-control" th:field="*{fullName}">
+        <div th:if="${#fields.hasErrors('fullName')}" class="error">
+            <span th:errors="*{fullName}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="fullName" class="form-label">Giới tính</label>
+        <input type="radio" th:field="*{gender}" value="true"> Nam
+        <input type="radio" th:field="*{gender}" value="false"> Nữ<br>
+        <div th:if="${#fields.hasErrors('gender')}" class="error">
+            <span th:errors="*{gender}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">Địa chỉ</label>
+        <input type="text" id="address" name="address" class="form-control" th:field="*{address}">
+        <div th:if="${#fields.hasErrors('address')}" class="error">
+            <span th:errors="*{address}"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="role" class="form-label">Vai trò</label>
+        <select id="role" name="role" class="form-select" th:field="*{role}">
+            <option value="" disabled selected>-- Chọn vai trò --</option>
+            <option th:each="role : ${roles}"
+                    th:value="${role}"
+                    th:text="${role}">
+            </option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Trạng thái</label>
+        <input type="radio" th:field="*{status}" value="true"> Hoạt động
+        <input type="radio" th:field="*{status}" value="false"> Khoá<br>
+        <div th:if="${#fields.hasErrors('status')}" class="error">
+            <span th:errors="*{status}"></span>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập Nhật</button>
+
+    <div  class="card-footer d-flex justify-content-between">
+        <a th:href="@{/dashboard/users/list}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+    </div>
+</form>
+</body>
+</html>

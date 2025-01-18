@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Toast</title>
+
+  <!--  Bootstrap CSS  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!--  Custom Style  -->
+  <link href="/css/toast.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="toast-container">
+  <div class="toast success" th:if="${messageType} == 'success'">
+    <i class="fa-solid fa-circle-check toast-icon" style="color: green"></i>
+    <div class="toast-content">
+      <div class="toast-title success"><strong>Thành Công</strong></div>
+      <div class="toast-message success" th:text="${message}"></div>
+    </div>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+  </div>
+  <div class="toast error" th:if="${messageType} == 'error'" >
+    <i class="fa-solid fa-circle-xmark toast-icon" style="color: red"></i>
+    <div class="toast-content">
+      <div class="toast-title error"><strong>Lỗi</strong></div>
+      <div class="toast-message error" th:text="${message}"></div>
+    </div>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+  </div>
+</div>
+
+<!--  Custom JS  -->
+<script th:src="@{/js/toast.js}"></script>
+</body>
+</html>
