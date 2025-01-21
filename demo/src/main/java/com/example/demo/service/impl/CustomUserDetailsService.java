@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+
+
 import com.example.demo.model.Users;
 import com.example.demo.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
 
-        return new User(user.getUsername(), user.getPassword(), Collections.singletonList(authority));
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRole().name())
+                .build();
     }
 }
