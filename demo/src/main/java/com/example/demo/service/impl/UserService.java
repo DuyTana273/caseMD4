@@ -1,17 +1,15 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Role;
-import com.example.demo.model.User;
+import com.example.demo.model.Users;
 import com.example.demo.repository.IUserRepository;
 import com.example.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -20,17 +18,17 @@ public class UserService implements IUserService {
     private IUserRepository iUserRepository;
 
     @Override
-    public Page<User> findAll(Pageable pageable) {
+    public Page<Users> findAll(Pageable pageable) {
         return iUserRepository.findAll(pageable);
     }
 
     @Override
-    public User getById(Long id) {
+    public Users getById(Long id) {
         return iUserRepository.getById(id);
     }
 
     @Override
-    public void save(User user) {
+    public void save(Users user) {
         try {
             if (user.getRole() == null) {
                 user.setRole(Role.CUSTOMER);
@@ -60,12 +58,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public List<Users> findAllByRole(Role role) {
+        return iUserRepository.findAllByRole(role);
+    }
+
+    @Override
+    public Users findByUsername(String username) {
         return iUserRepository.findByUsername(username);
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Users findByEmail(String email) {
         return iUserRepository.findByEmail(email);
     }
 }

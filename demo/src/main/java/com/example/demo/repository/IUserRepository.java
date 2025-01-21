@@ -1,28 +1,31 @@
 package com.example.demo.repository;
 
-import com.example.demo.model.User;
+import com.example.demo.model.Role;
+import com.example.demo.model.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, Long> {
-    Page<User> findAll(Pageable pageable);
+public interface IUserRepository extends JpaRepository<Users, Long> {
+    Page<Users> findAll(Pageable pageable);
 
-    Optional<User> findByUsername(String username);
+    Users findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Users findByEmail(String email);
 
-    User getById(Long id);
+    Users getById(Long id);
 
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
 
-    User save(User user);
+    Users save(Users user);
 
     void deleteById(Long id);
+
+    List<Users> findAllByRole(Role role);
 }

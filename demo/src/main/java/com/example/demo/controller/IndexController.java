@@ -5,11 +5,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/")
 public class IndexController {
 
-    @GetMapping
+    @GetMapping("/")
     public String index() {
-        return "index";
+        return "redirect:/home";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 }

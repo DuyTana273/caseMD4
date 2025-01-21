@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Role;
-import com.example.demo.model.User;
+import com.example.demo.model.Users;
 import com.example.demo.model.dto.UserDTO;
 import com.example.demo.service.IUserService;
 import jakarta.validation.Valid;
@@ -63,7 +63,7 @@ public class UserController {
             return "dashboard/users/create";
         }
 
-        User user = new User();
+        Users user = new Users();
         BeanUtils.copyProperties(userDTO, user);
         iUserService.save(user);
 
@@ -76,7 +76,7 @@ public class UserController {
     public String viewUser(@PathVariable Long id,
                            Model model,
                            RedirectAttributes redirectAttributes) {
-        User user = iUserService.getById(id);
+        Users user = iUserService.getById(id);
         if (user == null) {
             redirectAttributes.addFlashAttribute("messageType", "success");
             redirectAttributes.addFlashAttribute("message", "Không tìm thấy người dùng!");
@@ -90,7 +90,7 @@ public class UserController {
     public String updateUser(@PathVariable Long id,
                              Model model,
                              RedirectAttributes redirectAttributes) {
-        User user = iUserService.getById(id);
+        Users user = iUserService.getById(id);
 
         if (user == null) {
             redirectAttributes.addFlashAttribute("messageType", "error");
@@ -110,7 +110,7 @@ public class UserController {
     public String updateUser(@Valid @ModelAttribute("user") UserDTO userDTO,
                              BindingResult bindingResult,
                              Model model, RedirectAttributes redirectAttributes) {
-        User userToUpdate = iUserService.getById(userDTO.getId());
+        Users userToUpdate = iUserService.getById(userDTO.getId());
 
         if (!userToUpdate.getEmail().equals(userDTO.getEmail()) && iUserService.existsByEmail(userDTO.getEmail())) {
             model.addAttribute("user", userDTO);
@@ -143,6 +143,7 @@ public class UserController {
     }
 
     @GetMapping("/delete/{id}")
+    @ResponseBody
     public String deleteUser(@PathVariable("id") Long id,
                              RedirectAttributes redirectAttributes) {
         try {

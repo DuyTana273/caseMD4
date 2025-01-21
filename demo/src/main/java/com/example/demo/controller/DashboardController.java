@@ -15,6 +15,6 @@ public class DashboardController {
 
     @GetMapping("/users")
     public String users() {
-        return "dashboard/users/list";
+        return "redirect:/dashboard/users/list";
     }
 }
