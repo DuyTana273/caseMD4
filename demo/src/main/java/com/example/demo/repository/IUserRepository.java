@@ -5,6 +5,8 @@ import com.example.demo.model.Users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,4 +30,15 @@ public interface IUserRepository extends JpaRepository<Users, Long> {
     void deleteById(Long id);
 
     List<Users> findAllByRole(Role role);
+
+    //Query
+    @Query("SELECT u FROM Users u WHERE u.role IN :roles")
+    Page<Users> findAllByRoleIn(@Param("roles") List<Role> roles, Pageable pageable);
+
+    @Query("SELECT u FROM Users u WHERE (u.role IN :roles) AND " +
+            "(LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+    Page<Users> findByRoleAndKeyword(@Param("roles") List<Role> roles,
+                             @Param("keyword") String keyword,
+                             Pageable pageable);
 }

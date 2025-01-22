@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IUserService {
+    Page<Users> findUsersWithPaginationAndRoleFilter(List<Role> roles, int page, int size, String keyword);
+
     Page<Users> findAll(Pageable pageable);
 
     Users findByUsername(String username);

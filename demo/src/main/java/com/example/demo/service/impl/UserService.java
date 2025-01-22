@@ -6,6 +6,7 @@ import com.example.demo.repository.IUserRepository;
 import com.example.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,15 @@ import java.util.List;
 public class UserService implements IUserService {
     @Autowired
     private IUserRepository iUserRepository;
+
+    @Override
+    public Page<Users> findUsersWithPaginationAndRoleFilter(List<Role> roles, int page, int size, String keyword) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            return iUserRepository.findByRoleAndKeyword(roles, keyword, pageable);
+        }
+        return iUserRepository.findAllByRoleIn(roles, pageable);
+    }
 
     @Override
     public Page<Users> findAll(Pageable pageable) {
