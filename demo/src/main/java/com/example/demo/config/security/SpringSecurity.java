@@ -31,9 +31,9 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**","/favicon.ico", "/home").permitAll() // Các đường dẫn không cần login
-                        .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "EMPLOYEE") // Yêu cầu role ADMIN
-                        .requestMatchers("/home/**").hasRole("CUSTOMER") // Yêu cầu Role USER
+                        .requestMatchers("/login", "/css/**", "/js/**","/favicon.ico", "/home").permitAll()
+                        .requestMatchers("/dashboard/**").hasRole("ADMIN")
+                        .requestMatchers("/home/**").hasAnyRole("CUSTOMER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -66,20 +66,5 @@ public class SpringSecurity {
 
         return http.build();
     }
-
-//    @Bean
-//    public AuthenticationSuccessHandler customSuccessHandler() {
-//        return (request, response, authentication) -> {
-//            String role = authentication.getAuthorities().stream()
-//                    .findFirst().map(Object::toString).orElse("");
-//            if (role.contains("ADMIN")) {
-//                response.sendRedirect("/dashboard/dashboard");
-//            } else if (role.contains("EMPLOYEE")) {
-//                response.sendRedirect("/dashboard/dashboard");
-//            } else {
-//                response.sendRedirect("/home");
-//            }
-//        };
-//    }
 
 }

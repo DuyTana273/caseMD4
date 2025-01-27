@@ -36,6 +36,7 @@ public class Users {
 
     @Column(name = "status")
     private Boolean status;
+
     // Constructors
     public Users() {}
 

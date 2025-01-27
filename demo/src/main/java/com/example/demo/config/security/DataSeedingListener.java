@@ -25,7 +25,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             Users admin = new Users();
             admin.setUsername("admin");
             // mã hóa mật khẩu
-            admin.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("admin"));
+            admin.setPassword(EncryptPasswordUtils.encryptPasswordUtils("admin"));
             admin.setEmail("admin@gmail.com");
             admin.setPhone("123456789");
             admin.setFullName("Admin");
@@ -40,7 +40,7 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
         if (iUserRepository.findByUsername("customer") == null) {
             Users customer = new Users();
             customer.setUsername("customer");
-            customer.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123"));
+            customer.setPassword(EncryptPasswordUtils.encryptPasswordUtils("123"));
             customer.setEmail("customer@gmail.com");
             customer.setPhone("0123456789");
             customer.setFullName("Customer");
@@ -49,21 +49,6 @@ public class DataSeedingListener implements ApplicationListener<ContextRefreshed
             customer.setStatus(true);
             customer.setRole(Role.CUSTOMER);
             iUserRepository.save(customer);
-        }
-
-        //Them employee
-        if (iUserRepository.findByUsername("employee") == null) {
-            Users employee = new Users();
-            employee.setUsername("employee");
-            employee.setPassword(EncryptPasswordUtils.EncryptPasswordUtils("123"));
-            employee.setEmail("employee@gmail.com");
-            employee.setPhone("01234567890");
-            employee.setFullName("Employee");
-            employee.setGender(false);
-            employee.setAddress("Đà Nẵng");
-            employee.setStatus(true);
-            employee.setRole(Role.EMPLOYEE);
-            iUserRepository.save(employee);
         }
     }
 

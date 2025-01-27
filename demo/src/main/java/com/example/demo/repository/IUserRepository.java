@@ -31,14 +31,11 @@ public interface IUserRepository extends JpaRepository<Users, Long> {
 
     List<Users> findAllByRole(Role role);
 
-    //Query
-    @Query("SELECT u FROM Users u WHERE u.role IN :roles")
-    Page<Users> findAllByRoleIn(@Param("roles") List<Role> roles, Pageable pageable);
+    @Query("SELECT u FROM Users u WHERE " +
+            "(:keyword IS NULL OR LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:role IS NULL OR u.role = :role)")
+    Page<Users> searchByKeywordAndRole(@Param("keyword") String keyword, @Param("role") Role role, Pageable pageable);
 
-    @Query("SELECT u FROM Users u WHERE (u.role IN :roles) AND " +
-            "(LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    Page<Users> findByRoleAndKeyword(@Param("roles") List<Role> roles,
-                             @Param("keyword") String keyword,
-                             Pageable pageable);
 }

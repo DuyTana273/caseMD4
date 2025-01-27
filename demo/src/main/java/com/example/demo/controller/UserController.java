@@ -2,10 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Role;
 import com.example.demo.model.Users;
-import com.example.demo.model.dto.PaginationResult;
 import com.example.demo.model.dto.UserDTO;
 import com.example.demo.service.IUserService;
-import com.example.demo.service.impl.PaginationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,43 +27,35 @@ public class UserController {
     @Autowired
     private IUserService iUserService;
 
-    @Autowired
-    private PaginationService paginationService;
-
     @GetMapping("/list")
-    public String list(@RequestParam(name = "page", required = false, defaultValue = "0") int page,
-                       @RequestParam(name = "size", required = false, defaultValue = "10") int size,
+    public String list(@RequestParam(name = "page", defaultValue = "0") int page,
                        @RequestParam(name = "keyword", required = false) String keyword,
-                       @RequestParam(name = "role", required = false) String role,
+                       @RequestParam(name = "role", required = false) Role role,
                        Model model) {
-        List<Role> allRoles = Arrays.asList(Role.values());
-        List<Role> rolesToFilter = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, 2);
+        Page<Users> users;
 
-        if(role != null && !role.isEmpty()) {
-            try {
-                Role selectedRole = Role.valueOf(role);
-                if(allRoles.contains(selectedRole)) {
-                    rolesToFilter = List.of(selectedRole);
-                }
-            } catch (IllegalArgumentException ignored) {
-
+        if ((keyword != null && !keyword.trim().isEmpty()) || role != null) {
+            users = iUserService.searchUsers(keyword, role, pageable);
+            if (users.isEmpty()) {
+                model.addAttribute("messageType", "error");
+                model.addAttribute("message", "Không tìm thấy người dùng nào phù hợp!");
+            }
+        } else {
+            users = iUserService.findAll(pageable);
+            if (users.isEmpty()) {
+                model.addAttribute("messageType", "error");
+                model.addAttribute("message", "Hiện tại không có người dùng nào trong hệ thống!");
             }
         }
-        Page<Users> userPage = iUserService.findUsersWithPaginationAndRoleFilter(
-                rolesToFilter, page, size, keyword
-        );
-        PaginationResult paginationResult = paginationService.calculatePagination(userPage);
-        model.addAttribute("userPage", userPage);
-        model.addAttribute("users", userPage.getContent());
-        model.addAttribute("currentPage", paginationResult.getCurrentPage());
-        model.addAttribute("totalPages", paginationResult.getTotalPages());
-        model.addAttribute("pageNumbers", paginationResult.getPageNumbers());
+
+        model.addAttribute("users", users);
         model.addAttribute("keyword", keyword);
         model.addAttribute("role", role);
-        model.addAttribute("allRoles", allRoles);
-        model.addAttribute("page", "users");
+        model.addAttribute("roles", Role.values());
         return "dashboard/users/list";
     }
+
 
     @GetMapping("/create")
     public ModelAndView createUser(Model model) {

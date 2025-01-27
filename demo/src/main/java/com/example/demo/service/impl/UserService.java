@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.EncryptPasswordUtils;
 import com.example.demo.model.Role;
 import com.example.demo.model.Users;
 import com.example.demo.repository.IUserRepository;
 import com.example.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +18,8 @@ public class UserService implements IUserService {
     @Autowired
     private IUserRepository iUserRepository;
 
-    @Override
-    public Page<Users> findUsersWithPaginationAndRoleFilter(List<Role> roles, int page, int size, String keyword) {
-        Pageable pageable = PageRequest.of(page, size);
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            return iUserRepository.findByRoleAndKeyword(roles, keyword, pageable);
-        }
-        return iUserRepository.findAllByRoleIn(roles, pageable);
-    }
+    @Autowired
+    private EncryptPasswordUtils encryptPasswordUtils;
 
     @Override
     public Page<Users> findAll(Pageable pageable) {
@@ -46,6 +40,7 @@ public class UserService implements IUserService {
             if (user.getStatus() == null) {
                 user.setStatus(true);
             }
+            user.setPassword(encryptPasswordUtils.encryptPasswordUtils(user.getPassword()));
             iUserRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Có lỗi khi thêm người dùng : " + e.getMessage());
@@ -70,6 +65,16 @@ public class UserService implements IUserService {
     @Override
     public List<Users> findAllByRole(Role role) {
         return iUserRepository.findAllByRole(role);
+    }
+
+    @Override
+    public Page<Users> searchUsers(String keyword, Role role, Pageable pageable) {
+        return iUserRepository.searchByKeywordAndRole(keyword, role, pageable);
+    }
+
+    @Override
+    public String encryptPassword(String password) {
+        return "";
     }
 
     @Override

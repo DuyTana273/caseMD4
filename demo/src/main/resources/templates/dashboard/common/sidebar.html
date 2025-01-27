@@ -1,0 +1,30 @@
+<nav th:fragment="sidebar" class="navbar-default navbar-side" role="navigation">
+  <div class="sidebar-collapse">
+    <ul class="nav" id="main-menu">
+      <li class="text-center user-image-back">
+        <img src="/img/dashboard/find_user.png" class="img-responsive avatar-user" alt="admin avatar"/>
+      </li>
+      <li>
+        <a th:href="@{/dashboard}"><i class="fas fa-desktop"></i>Dashboard</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/users/list}"><i class="fas fa-user"></i>Quản lý tài khoản</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/products}"><i class="fab fa-product-hunt"></i>Quản lý sản phẩm</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/productTypes}"><i class="fas fa-laptop"></i>Quản lý nhãn hàng</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/carts}"><i class="fas fa-shopping-cart"></i>Quản lý giỏ hàng</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/orders}"><i class="fas fa-file-invoice"></i>Quản lý đơn hàng</a>
+      </li>
+      <li>
+        <a th:href="@{/dashboard/posts}"><i class="fas fa-blog"></i>Quản lý bài viết</a>
+      </li>
+    </ul>
+  </div>
+</nav>
