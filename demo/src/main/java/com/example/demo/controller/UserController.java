@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 @Controller
 @RequestMapping("/dashboard/users")
 public class UserController {
@@ -105,7 +101,7 @@ public class UserController {
                            RedirectAttributes redirectAttributes) {
         Users user = iUserService.getById(id);
         if (user == null) {
-            redirectAttributes.addFlashAttribute("messageType", "success");
+            redirectAttributes.addFlashAttribute("messageType", "error");
             redirectAttributes.addFlashAttribute("message", "Không tìm thấy người dùng!");
             return "redirect:/dashboard/users/list";
         }

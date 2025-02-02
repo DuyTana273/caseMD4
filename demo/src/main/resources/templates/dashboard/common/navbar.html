@@ -1,3 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Navbar</title>
+
+    <!--  Bootstrap CSS  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!--  Custom Style  -->
+
+</head>
+<body>
+
 <div th:fragment="navbar">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="adjust-nav">
@@ -9,14 +23,66 @@
                 </button>
                 <a class="navbar-brand" th:href="@{/dashboard}"><i class="fa fa-square-o"></i>&nbsp;2TECH</a>
             </div>
-            <div th:if="${userLogged != null}">
+
+            <!-- Hiển thị nếu người dùng đã đăng nhập -->
+            <div sec:authorize="isAuthenticated()">
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right" style="display: flex; align-items: center">
-                        <li>Chào mừng <span th:text="${fullName}"></span>!</li>
-                        <li><a href="/logout">Đăng xuất<i style="margin-left: 8px" class="fas fa-sign-out-alt"></i></a></li>
+                        <li>Chào mừng, <span sec:authentication="name"></span>!</li>
+                        <li>
+                            <a href="/logout">Đăng xuất
+                                <i style="margin-left: 8px" class="fas fa-sign-out-alt"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Hiển thị nếu người dùng chưa đăng nhập -->
+            <div sec:authorize="isAnonymous()">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/login">Đăng nhập</a></li>
+                        <li><a href="/register">Đăng ký</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<header id="header" class="header bg-light shadow-sm py-2">
+    <!-- Toggle Menu (Cột bên trái) -->
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-3">
+                <div class="header_toggle">
+                    <i class='bx bx-menu' id="header-toggle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Section (Cột giữa) -->
+
+    <!-- User Section và Cart -->
+    <div class="col-3 d-flex justify-content-end align-items-center">
+        <!-- Cart -->
+        <div class="cart-info ms-3">
+            <a th:href="@{/cart}" class="d-flex align-items-center">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge bg-danger ms-2">Giỏ Hàng</span>
+            </a>
+        </div>
+
+        <!-- User Info -->
+        <div class="d-flex align-items-center ms-3">
+            <img alt="avatar" class="rounded-circle border" width="40px">
+            <a href="${pageContext.request.contextPath}/users?action=viewUser&username=${sessionScope.loggedInUser.username}" class="ms-2 text-dark fw-semibold text-decoration-none">
+                ${sessionScope.loggedInUser.fullName}
+            </a>
+        </div>
+    </div>
+</header>
+
+</body>
